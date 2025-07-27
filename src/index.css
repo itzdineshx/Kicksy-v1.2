@@ -1,0 +1,740 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    /* Kicksy Brand Colors */
+    --primary: 22 100% 58%; /* Kicksy Orange */
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 22 100% 68%;
+
+    --secondary: 210 85% 25%; /* Kicksy Navy Blue */
+    --secondary-foreground: 0 0% 100%;
+
+    --tertiary: 214 100% 50%; /* Bright Blue Accent */
+    --tertiary-foreground: 0 0% 100%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 28 100% 60%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 28 100% 60%;
+
+    /* Sports Theme Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    --gradient-sports: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--primary)/0.9), hsl(var(--tertiary)/0.9));
+    --gradient-mesh: radial-gradient(circle at 20% 50%, hsl(var(--primary)/0.3) 0%, transparent 50%), radial-gradient(circle at 80% 20%, hsl(var(--secondary)/0.3) 0%, transparent 50%), radial-gradient(circle at 40% 80%, hsl(var(--tertiary)/0.3) 0%, transparent 50%);
+    --gradient-card: linear-gradient(145deg, hsl(var(--card)) 0%, hsl(var(--card)/0.8) 100%);
+    
+    /* Stadium Shadows */
+    --shadow-stadium: 0 10px 30px -5px hsl(var(--primary) / 0.3);
+    --shadow-glow: 0 0 40px hsl(var(--primary-glow) / 0.4);
+    --shadow-card: 0 4px 20px -2px hsl(var(--foreground) / 0.1);
+    --shadow-elevated: 0 20px 40px -10px hsl(var(--foreground) / 0.15);
+    --shadow-floating: 0 8px 32px -8px hsl(var(--primary) / 0.35);
+
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --transition-spring: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 240 10% 8%;
+    --foreground: 0 0% 95%;
+
+    --card: 240 10% 10%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 240 10% 10%;
+    --popover-foreground: 0 0% 95%;
+
+    /* Kicksy Dark Mode Colors */
+    --primary: 22 100% 65%; /* Brighter orange for dark mode */
+    --primary-foreground: 240 10% 8%;
+    --primary-glow: 22 100% 75%;
+
+    --secondary: 210 85% 30%; /* Brighter navy for dark mode */
+    --secondary-foreground: 240 10% 8%;
+
+    --tertiary: 214 100% 60%; /* Brighter blue accent */
+    --tertiary-foreground: 240 10% 8%;
+
+    --muted: 240 10% 15%;
+    --muted-foreground: 240 5% 65%;
+
+    --accent: 28 100% 65%;
+    --accent-foreground: 240 10% 8%;
+
+    --destructive: 0 84% 65%;
+    --destructive-foreground: 240 10% 8%;
+
+    --border: 240 10% 18%;
+    --input: 240 10% 18%;
+    --ring: 28 100% 65%;
+
+    /* Dark mode gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    --gradient-sports: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--primary)/0.8), hsl(var(--tertiary)/0.8));
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-muted;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-primary/50 rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-primary/70;
+  }
+  
+  /* Premium glass effect */
+  .glass-effect {
+    backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  /* Floating animation */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  /* Shimmer loading effect */
+  .shimmer {
+    background: linear-gradient(90deg, 
+      transparent, 
+      rgba(255, 255, 255, 0.4), 
+      transparent
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+  
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  
+  /* Line clamp utilities */
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+  }
+  
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+  
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+  
+  /* Enhanced hover effects */
+  .hover-glow {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .hover-glow:hover {
+    box-shadow: 0 0 30px hsl(var(--primary) / 0.4);
+    transform: translateY(-2px);
+  }
+  
+  /* Animated background patterns */
+  .pattern-dots {
+    background-image: radial-gradient(circle, hsl(var(--primary) / 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+  
+  .pattern-grid {
+    background-image: 
+      linear-gradient(hsl(var(--border)) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--border)) 1px, transparent 1px);
+    background-size: 30px 30px;
+  }
+  
+  /* Scroll-triggered animations */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  .reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  /* Interactive elements */
+  .interactive-card {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+  }
+  
+  .interactive-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 
+      0 20px 40px -10px hsl(var(--foreground) / 0.15),
+      0 0 0 1px hsl(var(--primary) / 0.1);
+  }
+  
+  /* Magnetic button effect */
+  .magnetic-button {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .magnetic-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+  }
+  
+  .magnetic-button:hover::before {
+    left: 100%;
+  }
+  
+  /* Kicksy Brand Specific Styles */
+  .kicksy-logo-glow {
+    filter: drop-shadow(0 0 8px hsl(var(--primary) / 0.3));
+  }
+  
+  .kicksy-logo-glow:hover {
+    filter: drop-shadow(0 0 12px hsl(var(--primary) / 0.5));
+  }
+  
+  .kicksy-gradient-text {
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .kicksy-pulse {
+    animation: kicksy-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  @keyframes kicksy-pulse {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.8;
+      transform: scale(1.05);
+    }
+  }
+  
+  /* Marquee animation for live ticker */
+  @keyframes marquee {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+  }
+  
+  .animate-marquee {
+    animation: marquee 30s linear infinite;
+  }
+  
+  /* Enhanced hover effects for cards */
+  .hover-lift {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 
+      0 25px 50px -12px rgba(0, 0, 0, 0.25),
+      0 0 0 1px hsl(var(--primary) / 0.1);
+  }
+  
+  /* Staggered animations */
+  .stagger-animation > * {
+    animation-delay: calc(var(--stagger-delay, 0) * 100ms);
+  }
+  
+  /* Loading skeleton improvements */
+  .skeleton-pulse {
+    background: linear-gradient(90deg, 
+      hsl(var(--muted)), 
+      hsl(var(--muted)/0.8), 
+      hsl(var(--muted))
+    );
+    background-size: 200% 100%;
+    animation: skeleton-pulse 1.5s ease-in-out infinite;
+  }
+  
+  @keyframes skeleton-pulse {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  
+  /* Slide up animation for hero sections */
+  .animate-slide-up {
+    animation: slide-up 0.6s ease-out;
+  }
+  
+  @keyframes slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Pulse glow animation for live elements */
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+  
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 5px hsl(var(--primary) / 0.5);
+    }
+    50% {
+      box-shadow: 0 0 20px hsl(var(--primary) / 0.8), 0 0 30px hsl(var(--primary) / 0.6);
+    }
+  }
+  
+  /* Fix for buttons in sport pages */
+  .group:hover .group-hover\:shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+  
+  /* Enhanced notification animations */
+  .animate-slide-in-right {
+    animation: slide-in-right 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+  
+  @keyframes slide-in-right {
+    from {
+      transform: translateX(120%) scale(0.7) rotate(10deg);
+      opacity: 0;
+      filter: blur(4px);
+    }
+    60% {
+      transform: translateX(-5%) scale(1.02) rotate(-2deg);
+      opacity: 0.9;
+      filter: blur(1px);
+    }
+    to {
+      transform: translateX(0) scale(1) rotate(0deg);
+      opacity: 1;
+      filter: blur(0px);
+    }
+  }
+  
+  .animate-notification-glow {
+    animation: notification-glow 3s ease-in-out infinite;
+  }
+  
+  @keyframes notification-glow {
+    0%, 100% {
+      box-shadow: 0 4px 20px hsl(var(--destructive) / 0.3);
+    }
+    33% {
+      box-shadow: 0 8px 40px hsl(var(--destructive) / 0.6), 0 0 60px hsl(var(--destructive) / 0.4);
+    }
+    66% {
+      box-shadow: 0 12px 60px hsl(var(--destructive) / 0.8), 0 0 80px hsl(var(--destructive) / 0.5);
+    }
+  }
+  
+  .animate-attention-bounce {
+    animation: attention-bounce 1.2s ease-in-out 3;
+  }
+  
+  @keyframes attention-bounce {
+    0%, 20%, 50%, 80%, 100% {
+      transform: translateY(0) scale(1);
+    }
+    40% {
+      transform: translateY(-12px) scale(1.08);
+    }
+    60% {
+      transform: translateY(-6px) scale(1.04);
+    }
+  }
+
+  /* Enhanced price tag animations */
+  .animate-price-pulse {
+    animation: price-pulse 2s ease-in-out infinite;
+  }
+  
+  @keyframes price-pulse {
+    0%, 100% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 hsl(var(--primary) / 0.4);
+    }
+    50% {
+      transform: scale(1.02);
+      box-shadow: 0 0 0 8px hsl(var(--primary) / 0);
+    }
+  }
+
+  .animate-deal-flash {
+    animation: deal-flash 1.5s ease-in-out infinite;
+  }
+  
+  @keyframes deal-flash {
+    0%, 100% {
+      background-color: hsl(var(--destructive) / 0.1);
+      color: hsl(var(--destructive));
+    }
+    50% {
+      background-color: hsl(var(--destructive) / 0.3);
+      color: hsl(var(--destructive-foreground));
+    }
+  }
+
+  /* Demand indicator animations */
+  .animate-demand-high {
+    animation: demand-high 2s ease-in-out infinite;
+  }
+  
+  @keyframes demand-high {
+    0%, 100% {
+      background-color: hsl(var(--destructive) / 0.1);
+      transform: scale(1);
+    }
+    50% {
+      background-color: hsl(var(--destructive) / 0.2);
+      transform: scale(1.02);
+    }
+  }
+
+  .animate-progress-fill {
+    animation: progress-fill 3s ease-out;
+  }
+  
+  @keyframes progress-fill {
+    from {
+      width: 0%;
+    }
+    to {
+      width: var(--progress-value);
+    }
+  }
+
+  /* AI insight animations */
+  .animate-ai-thinking {
+    animation: ai-thinking 2s ease-in-out infinite;
+  }
+  
+  @keyframes ai-thinking {
+    0%, 100% {
+      opacity: 0.7;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+  }
+
+  /* Microinteractions */
+  .animate-micro-bounce {
+    animation: micro-bounce 0.3s ease-out;
+  }
+  
+  @keyframes micro-bounce {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+
+  .animate-shake {
+    animation: shake 0.5s ease-in-out;
+  }
+  
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+  }
+  
+  /* Enhanced Animations */
+  .magnetic-button {
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  
+  .magnetic-button:hover {
+    transform: translateY(-2px);
+  }
+  
+  /* Pulse glow animation */
+  .animate-pulse-glow {
+    animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  @keyframes pulse-glow {
+    0%, 100% {
+      opacity: 1;
+      box-shadow: 0 0 5px hsl(var(--primary)/0.5);
+    }
+    50% {
+      opacity: 0.8;
+      box-shadow: 0 0 20px hsl(var(--primary)/0.8), 0 0 30px hsl(var(--primary)/0.4);
+    }
+  }
+  
+  /* Stadium bounce animation */
+  .animate-stadium-bounce {
+    animation: stadium-bounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+  
+  @keyframes stadium-bounce {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2) rotate(5deg); }
+    100% { transform: scale(1); }
+  }
+  
+  /* Wiggle animation */
+  .animate-wiggle {
+    animation: wiggle 0.5s ease-in-out;
+  }
+  
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-3deg); }
+    75% { transform: rotate(3deg); }
+  }
+  
+  /* Enhanced slide animations */
+  .animate-slide-up {
+    animation: slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  @keyframes slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .animate-slide-in-bottom {
+    animation: slide-in-bottom 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  @keyframes slide-in-bottom {
+    from {
+      opacity: 0;
+      transform: translateY(50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Scale in animation */
+  .animate-scale-in {
+    animation: scale-in 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  @keyframes scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  /* Interactive hover states */
+  .hover-lift {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-4px);
+  }
+  
+  /* Enhanced shadows */
+  .shadow-glow {
+    box-shadow: 0 0 20px hsl(var(--primary)/0.3);
+  }
+  
+  .shadow-stadium {
+    box-shadow: 0 25px 50px -12px hsl(var(--primary)/0.25);
+  }
+  
+  /* Gradient mesh background */
+  .bg-gradient-mesh {
+    background: 
+      radial-gradient(circle at 20% 50%, hsl(var(--primary)/0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, hsl(var(--secondary)/0.1) 0%, transparent 50%),
+      radial-gradient(circle at 40% 80%, hsl(var(--tertiary)/0.1) 0%, transparent 50%);
+  }
+  
+  /* Subtle background pattern */
+  .bg-gradient-subtle {
+    background: 
+      linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--muted)/0.3) 100%);
+  }
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 768px) {
+  /* Prevent horizontal scrolling */
+  html, body {
+    overflow-x: hidden;
+  }
+  
+  /* Improve touch targets */
+  button, .button, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Better notification spacing */
+  .mobile-notification-banner {
+    margin: 1rem;
+    margin-bottom: calc(env(safe-area-inset-bottom) + 1rem);
+  }
+  
+  /* Hide scrollbars on mobile for cleaner look */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Better spacing for mobile cards */
+  .mobile-card {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+  
+  /* Responsive text sizing */
+  .mobile-hero-title {
+    font-size: clamp(1.25rem, 4vw, 1.5rem);
+    line-height: 1.2;
+  }
+  
+  .mobile-hero-subtitle {
+    font-size: clamp(0.875rem, 3vw, 1rem);
+  }
+}
+
+/* Animation improvements for mobile */
+@keyframes notification-slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-notification-slide-up {
+  animation: notification-slide-up 0.3s ease-out;
+}
+
+/* Improve fixed positioning on mobile */
+@supports (padding: max(0px)) {
+  .mobile-safe-area {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+}
