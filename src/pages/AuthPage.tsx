@@ -4,14 +4,17 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
-import { User, Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { User, Mail, Lock, Eye, EyeOff, Shield, Users, UserCheck } from "lucide-react";
+import type { UserRole } from "@/contexts/AuthContext";
 
 const AuthPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedRole, setSelectedRole] = useState<UserRole>('user');
   const navigate = useNavigate();
   const { toast } = useToast();
   const { login, signUp } = useAuth();
@@ -29,6 +32,18 @@ const AuthPage = () => {
     confirmPassword: ""
   });
 
+  // Demo credentials for different roles
+  const demoCredentials = {
+    admin: { email: 'admin@kicksy.com', password: 'admin123' },
+    organizer: { email: 'organizer@kicksy.com', password: 'organizer123' },
+    user: { email: 'user@kicksy.com', password: 'user123' }
+  };
+
+  const fillDemoCredentials = () => {
+    const credentials = demoCredentials[selectedRole];
+    setLoginForm({ email: credentials.email, password: credentials.password });
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -39,7 +54,15 @@ const AuthPage = () => {
         title: "Login successful!",
         description: "Welcome back to Kicksy!"
       });
-      navigate("/");
+      
+      // Navigate based on role (for demo purposes)
+      if (loginForm.email.includes('admin')) {
+        navigate("/admin");
+      } else if (loginForm.email.includes('organizer')) {
+        navigate("/organizer");
+      } else {
+        navigate("/dashboard");
+      }
     } catch (error: any) {
       toast({
         title: "Login failed",
@@ -105,6 +128,35 @@ const AuthPage = () => {
             <TabsContent value="login" className="space-y-4">
               <form onSubmit={handleLogin} className="space-y-4">
                 <div className="space-y-2">
+                  <Label htmlFor="role-select">Demo Role</Label>
+                  <Select value={selectedRole} onValueChange={(value: UserRole) => setSelectedRole(value)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select demo role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="user">
+                        <div className="flex items-center gap-2">
+                          <User className="w-4 h-4" />
+                          User
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="admin">
+                        <div className="flex items-center gap-2">
+                          <Shield className="w-4 h-4" />
+                          Admin
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="organizer">
+                        <div className="flex items-center gap-2">
+                          <Users className="w-4 h-4" />
+                          Organizer
+                        </div>
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
                   <Label htmlFor="login-email">Email</Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -145,9 +197,26 @@ const AuthPage = () => {
                   </div>
                 </div>
 
-                <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? "Signing in..." : "Sign In"}
-                </Button>
+                <div className="flex gap-2">
+                  <Button type="submit" className="flex-1" disabled={isLoading}>
+                    {isLoading ? "Signing in..." : "Sign In"}
+                  </Button>
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    onClick={fillDemoCredentials}
+                    disabled={isLoading}
+                  >
+                    Demo
+                  </Button>
+                </div>
+
+                <div className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-lg">
+                  <p className="font-medium mb-1">Demo Credentials:</p>
+                  <p>• Admin: admin@kicksy.com (admin123)</p>
+                  <p>• Organizer: organizer@kicksy.com (organizer123)</p>
+                  <p>• User: user@kicksy.com (user123)</p>
+                </div>
               </form>
             </TabsContent>
 
