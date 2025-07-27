@@ -15,7 +15,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLocation } from "@/contexts/LocationContext";
-import LoginModal from "./LoginModal";
+
 import { useWishlist } from "./WishlistProvider";
 import { useCart } from "./CartProvider";
 import { useNotifications, NotificationPanel } from "./NotificationProvider";
@@ -28,7 +28,7 @@ import WeatherWidget from "./WeatherWidget";
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  
   const { wishlist } = useWishlist();
   const { getTotalItems } = useCart();
   const { unreadCount } = useNotifications();
@@ -223,7 +223,7 @@ const Header = () => {
                       <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                         <Avatar className="h-8 w-8">
                           <AvatarFallback className="bg-primary text-primary-foreground">
-                            {user?.name.split(' ').map(n => n[0]).join('') || 'U'}
+                            {user?.email?.charAt(0).toUpperCase() || 'U'}
                           </AvatarFallback>
                         </Avatar>
                       </Button>
@@ -254,9 +254,11 @@ const Header = () => {
                     </DropdownMenuContent>
                   </DropdownMenu>
                 ) : (
-                  <Button onClick={() => setIsLoginOpen(true)}>
-                    <User className="w-4 h-4 mr-2" />
-                    Login
+                  <Button asChild>
+                    <Link to="/auth">
+                      <User className="w-4 h-4 mr-2" />
+                      Login
+                    </Link>
                   </Button>
                 )}
               </div>
@@ -323,7 +325,9 @@ const Header = () => {
                       <Button variant="ghost" onClick={logout}>Logout</Button>
                     </div>
                   ) : (
-                    <Button onClick={() => setIsLoginOpen(true)}>Login</Button>
+                    <Button asChild>
+                      <Link to="/auth">Login</Link>
+                    </Button>
                   )}
                 </div>
               </div>
@@ -331,7 +335,7 @@ const Header = () => {
           )}
         </div>
       </header>
-      <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
+      
     </>
   );
 };

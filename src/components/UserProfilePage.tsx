@@ -14,8 +14,8 @@ const UserProfilePage = () => {
 
   // Mock user data - in real app this would come from API
   const userProfile = {
-    name: user?.name || "Arjun Sharma",
-    email: user?.email || "arjun.sharma@email.com",
+    name: user?.email?.split('@')[0] || "User",
+    email: user?.email || "user@email.com",
     avatar: "/placeholder.svg",
     joinDate: "March 2023",
     location: "Mumbai, India",

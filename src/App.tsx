@@ -45,6 +45,7 @@ const EventsPage = lazy(() => import("./pages/EventsPage"));
 const BookingHistoryPage = lazy(() => import("./pages/BookingHistoryPage"));
 const VenuesPage = lazy(() => import("./pages/VenuesPage"));
 const LoginPage = lazy(() => import("./pages/LoginPage"));
+const AuthPage = lazy(() => import("./pages/AuthPage"));
 
 const queryClient = new QueryClient();
 
@@ -82,6 +83,11 @@ const AppContent = () => {
           <Route path="/kabaddi" element={<Navigate to="/sports/kabaddi" replace />} />
 
           {/* Auth Routes */}
+          <Route path="/auth" element={
+            <LazyRoute>
+              <AuthPage />
+            </LazyRoute>
+          } />
           <Route path="/login" element={
             <LazyRoute>
               <LoginPage />

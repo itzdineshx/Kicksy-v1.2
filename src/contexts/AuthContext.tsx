@@ -1,83 +1,88 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { User, Session } from '@supabase/supabase-js';
 
 export type UserRole = 'admin' | 'organizer' | 'user' | 'guest';
 
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: UserRole;
-}
-
 interface AuthContextType {
   user: User | null;
+  session: Session | null;
   role: UserRole;
   login: (email: string, password: string) => Promise<void>;
+  signUp: (email: string, password: string) => Promise<void>;
   logout: () => void;
   isAuthenticated: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Mock users for demonstration - replace with real authentication
-const mockUsers: Record<string, User> = {
-  'admin@sportshub.com': {
-    id: '1',
-    name: 'Admin User',
-    email: 'admin@sportshub.com',
-    role: 'admin'
-  },
-  'organizer@sportshub.com': {
-    id: '2', 
-    name: 'Event Organizer',
-    email: 'organizer@sportshub.com',
-    role: 'organizer'
-  },
-  'user@sportshub.com': {
-    id: '3',
-    name: 'Regular User',
-    email: 'user@sportshub.com', 
-    role: 'user'
-  }
-};
-
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [role, setRole] = useState<UserRole>('guest');
 
   useEffect(() => {
-    // Check if user is already logged in (localStorage for demo)
-    const savedUser = localStorage.getItem('currentUser');
-    if (savedUser) {
-      const userData = JSON.parse(savedUser);
-      setUser(userData);
-      setRole(userData.role);
-    }
+    // Set up auth state listener FIRST
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setSession(session);
+        setUser(session?.user ?? null);
+        // For now, default to 'user' role for authenticated users
+        setRole(session?.user ? 'user' : 'guest');
+      }
+    );
+
+    // THEN check for existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      setRole(session?.user ? 'user' : 'guest');
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   const login = async (email: string, password: string) => {
-    // Mock authentication - replace with real auth
-    const foundUser = mockUsers[email];
-    if (foundUser && password === 'password') {
-      setUser(foundUser);
-      setRole(foundUser.role);
-      localStorage.setItem('currentUser', JSON.stringify(foundUser));
-    } else {
-      throw new Error('Invalid credentials');
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    });
+    
+    if (error) {
+      throw new Error(error.message);
     }
   };
 
-  const logout = () => {
+  const signUp = async (email: string, password: string) => {
+    const redirectUrl = `${window.location.origin}/`;
+    
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: redirectUrl
+      }
+    });
+    
+    if (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  const logout = async () => {
+    await supabase.auth.signOut();
     setUser(null);
+    setSession(null);
     setRole('guest');
-    localStorage.removeItem('currentUser');
   };
 
   return (
     <AuthContext.Provider value={{
       user,
+      session,
       role,
       login,
+      signUp,
       logout,
       isAuthenticated: !!user
     }}>
