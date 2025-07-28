@@ -48,7 +48,7 @@ export const GoogleSignInButton = ({ onSuccess }: { onSuccess?: () => void }) =>
 };
 
 export const PhoneAuthComponent = ({ onSuccess }: { onSuccess?: () => void }) => {
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('+91');
   const [otp, setOtp] = useState('');
   const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -135,13 +135,13 @@ export const PhoneAuthComponent = ({ onSuccess }: { onSuccess?: () => void }) =>
               <Input
                 id="phone"
                 type="tel"
-                placeholder="+1234567890"
+                placeholder="+919876543210"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 className="w-full"
               />
               <p className="text-sm text-muted-foreground">
-                Enter your phone number with country code (e.g., +1234567890)
+                Enter your phone number with country code (+91 for India)
               </p>
             </div>
             <Button 

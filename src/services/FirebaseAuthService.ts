@@ -6,13 +6,17 @@ import {
   ConfirmationResult,
   User as FirebaseUser
 } from 'firebase/auth';
-import { auth } from '@/config/firebase';
+import { auth, isFirebaseEnabled } from '@/config/firebase';
 
 class FirebaseAuthService {
   private recaptchaVerifier: RecaptchaVerifier | null = null;
 
   // Google Sign-In
   async signInWithGoogle(): Promise<FirebaseUser | null> {
+    if (!isFirebaseEnabled || !auth) {
+      throw new Error('Firebase is not properly configured. Please add your Firebase credentials.');
+    }
+    
     try {
       const provider = new GoogleAuthProvider();
       // Add additional scopes if needed
@@ -29,6 +33,10 @@ class FirebaseAuthService {
 
   // Phone Number Sign-In Setup
   async setupRecaptcha(containerId: string): Promise<void> {
+    if (!isFirebaseEnabled || !auth) {
+      return; // Silently fail if Firebase is not configured
+    }
+    
     if (!this.recaptchaVerifier) {
       this.recaptchaVerifier = new RecaptchaVerifier(auth, containerId, {
         size: 'invisible',
@@ -45,6 +53,10 @@ class FirebaseAuthService {
 
   // Send OTP to phone number
   async sendOTP(phoneNumber: string): Promise<ConfirmationResult> {
+    if (!isFirebaseEnabled || !auth) {
+      throw new Error('Firebase is not properly configured. Please add your Firebase credentials.');
+    }
+    
     try {
       if (!this.recaptchaVerifier) {
         throw new Error('Recaptcha not initialized');
@@ -78,6 +90,10 @@ class FirebaseAuthService {
 
   // Sign out
   async signOut(): Promise<void> {
+    if (!isFirebaseEnabled || !auth) {
+      return; // Silently fail if Firebase is not configured
+    }
+    
     try {
       await auth.signOut();
       this.recaptchaVerifier = null;
@@ -89,11 +105,18 @@ class FirebaseAuthService {
 
   // Get current user
   getCurrentUser(): FirebaseUser | null {
+    if (!isFirebaseEnabled || !auth) {
+      return null;
+    }
     return auth.currentUser;
   }
 
   // Listen to auth state changes
   onAuthStateChanged(callback: (user: FirebaseUser | null) => void) {
+    if (!isFirebaseEnabled || !auth) {
+      callback(null);
+      return () => {}; // Return empty unsubscribe function
+    }
     return auth.onAuthStateChanged(callback);
   }
 }

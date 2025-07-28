@@ -11,9 +11,23 @@ const firebaseConfig = {
   appId: "your-app-id"
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+// Check if Firebase is properly configured
+const isFirebaseConfigured = firebaseConfig.apiKey !== "your-api-key" && 
+                             firebaseConfig.projectId !== "your-project-id";
 
-// Initialize Firebase Authentication and get a reference to the service
-export const auth = getAuth(app);
+// Only initialize Firebase if properly configured
+let app: any = null;
+let auth: any = null;
+
+if (isFirebaseConfigured) {
+  try {
+    app = initializeApp(firebaseConfig);
+    auth = getAuth(app);
+  } catch (error) {
+    console.warn('Firebase initialization failed:', error);
+  }
+}
+
+export { auth };
+export const isFirebaseEnabled = isFirebaseConfigured && auth !== null;
 export default app;
