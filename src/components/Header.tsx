@@ -32,7 +32,7 @@ const Header = () => {
   const { wishlist } = useWishlist();
   const { getTotalItems } = useCart();
   const { unreadCount } = useNotifications();
-  const { isAuthenticated, user, logout, role } = useAuth();
+  const { isAuthenticated, isFirebaseAuthenticated, user, firebaseUser, logout, firebaseSignOut, role } = useAuth();
   const { selectedCity, setSelectedCity } = useLocation();
   const routerLocation = useRouterLocation();
 
@@ -217,13 +217,13 @@ const Header = () => {
               
               {/* User Authentication */}
               <div className="hidden sm:block">
-                {isAuthenticated ? (
+                {(isAuthenticated || isFirebaseAuthenticated) ? (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                         <Avatar className="h-8 w-8">
                           <AvatarFallback className="bg-primary text-primary-foreground">
-                            {user?.email?.charAt(0).toUpperCase() || 'U'}
+                            {(user?.email || firebaseUser?.email || firebaseUser?.displayName)?.charAt(0).toUpperCase() || 'U'}
                           </AvatarFallback>
                         </Avatar>
                       </Button>
@@ -247,7 +247,10 @@ const Header = () => {
                           Settings
                         </Link>
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={logout} className="flex items-center gap-2">
+                      <DropdownMenuItem onClick={async () => {
+                        if (firebaseUser) await firebaseSignOut();
+                        if (user) await logout();
+                      }} className="flex items-center gap-2">
                         <LogOut className="w-4 h-4" />
                         Logout
                       </DropdownMenuItem>
@@ -317,12 +320,15 @@ const Header = () => {
                   </div>
                   
                   {/* Authentication */}
-                  {isAuthenticated ? (
+                  {(isAuthenticated || isFirebaseAuthenticated) ? (
                     <div className="flex flex-col space-y-2">
                       <Button variant="outline" asChild>
                         <Link to={getDashboardLink()}>Dashboard</Link>
                       </Button>
-                      <Button variant="ghost" onClick={logout}>Logout</Button>
+                      <Button variant="ghost" onClick={async () => {
+                        if (firebaseUser) await firebaseSignOut();
+                        if (user) await logout();
+                      }}>Logout</Button>
                     </div>
                   ) : (
                     <Button asChild>

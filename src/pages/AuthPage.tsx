@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import { GoogleSignInButton, PhoneAuthComponent } from "@/components/FirebaseAuthComponents";
 import { User, Mail, Lock, Eye, EyeOff, Shield, Users, UserCheck } from "lucide-react";
 import type { UserRole } from "@/contexts/AuthContext";
 
@@ -120,12 +121,28 @@ const AuthPage = () => {
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="login" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="login">Sign In</TabsTrigger>
               <TabsTrigger value="signup">Sign Up</TabsTrigger>
+              <TabsTrigger value="phone">Phone</TabsTrigger>
             </TabsList>
 
             <TabsContent value="login" className="space-y-4">
+              {/* Firebase Auth Options */}
+              <div className="space-y-3">
+                <GoogleSignInButton onSuccess={() => navigate('/dashboard')} />
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <span className="w-full border-t" />
+                  </div>
+                  <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-background px-2 text-muted-foreground">
+                      Or continue with email
+                    </span>
+                  </div>
+                </div>
+              </div>
+
               <form onSubmit={handleLogin} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="role-select">Demo Role</Label>
@@ -221,6 +238,21 @@ const AuthPage = () => {
             </TabsContent>
 
             <TabsContent value="signup" className="space-y-4">
+              {/* Firebase Auth Options */}
+              <div className="space-y-3">
+                <GoogleSignInButton onSuccess={() => navigate('/dashboard')} />
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <span className="w-full border-t" />
+                  </div>
+                  <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-background px-2 text-muted-foreground">
+                      Or sign up with email
+                    </span>
+                  </div>
+                </div>
+              </div>
+
               <form onSubmit={handleSignup} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="signup-email">Email</Label>
@@ -283,6 +315,10 @@ const AuthPage = () => {
                   {isLoading ? "Creating account..." : "Create Account"}
                 </Button>
               </form>
+            </TabsContent>
+
+            <TabsContent value="phone" className="space-y-4">
+              <PhoneAuthComponent onSuccess={() => navigate('/dashboard')} />
             </TabsContent>
           </Tabs>
 
