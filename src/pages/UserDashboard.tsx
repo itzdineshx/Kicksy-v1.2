@@ -21,8 +21,8 @@ const UserDashboard = () => {
   const [activeTab, setActiveTab] = useState("bookings");
 
   const userInfo = {
-    name: "Rajesh Kumar",
-    email: "rajesh.kumar@email.com",
+    name: "DINESH S",
+    email: "personalaccdinesh@gmail.com",
     phone: "+91 98765 43210",
     joinDate: "January 2024",
     totalBookings: 15,
