@@ -35,7 +35,7 @@ const RouteGuard = ({
     if (!isChecking) {
       // Check authentication requirement
       if (requireAuth && !isAuthenticated) {
-        navigate(`/auth?redirect=${encodeURIComponent(location.pathname)}`);
+        navigate(`/login?redirect=${encodeURIComponent(location.pathname)}`);
         return;
       }
 
@@ -77,7 +77,7 @@ const RouteGuard = ({
             You need to be logged in to access this page.
           </p>
           <Button 
-            onClick={() => navigate('/auth')}
+            onClick={() => navigate('/login')}
             className="w-full"
           >
             <User className="w-4 h-4 mr-2" />

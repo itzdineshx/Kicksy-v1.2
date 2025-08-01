@@ -44,6 +44,7 @@ const UserProfilePage = lazy(() => import("./components/UserProfilePage"));
 const EventsPage = lazy(() => import("./pages/EventsPage"));
 const BookingHistoryPage = lazy(() => import("./pages/BookingHistoryPage"));
 const VenuesPage = lazy(() => import("./pages/VenuesPage"));
+const LoginPage = lazy(() => import("./pages/LoginPage"));
 const AuthPage = lazy(() => import("./pages/AuthPage"));
 
 const queryClient = new QueryClient();
@@ -85,6 +86,11 @@ const AppContent = () => {
           <Route path="/auth" element={
             <LazyRoute>
               <AuthPage />
+            </LazyRoute>
+          } />
+          <Route path="/login" element={
+            <LazyRoute>
+              <LoginPage />
             </LazyRoute>
           } />
 

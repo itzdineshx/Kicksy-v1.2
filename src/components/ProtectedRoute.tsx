@@ -11,11 +11,11 @@ interface ProtectedRouteProps {
 const ProtectedRoute = ({ 
   children, 
   allowedRoles = ['user', 'admin', 'organizer'], 
-  redirectTo = '/auth' 
+  redirectTo = '/' 
 }: ProtectedRouteProps) => {
-  const { isAuthenticated, role } = useAuth();
+  const { isAuthenticated, isFirebaseAuthenticated, role } = useAuth();
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated && !isFirebaseAuthenticated) {
     return <Navigate to={redirectTo} replace />;
   }
 
