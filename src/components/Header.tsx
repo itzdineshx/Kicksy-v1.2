@@ -15,6 +15,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLocation } from "@/contexts/LocationContext";
+import { SignOutButton } from "@clerk/clerk-react";
 
 import { useWishlist } from "./WishlistProvider";
 import { useCart } from "./CartProvider";
@@ -32,7 +33,7 @@ const Header = () => {
   const { wishlist } = useWishlist();
   const { getTotalItems } = useCart();
   const { unreadCount } = useNotifications();
-  const { isAuthenticated, isFirebaseAuthenticated, user, firebaseUser, logout, firebaseSignOut, role } = useAuth();
+  const { isAuthenticated, user, role } = useAuth();
   const { selectedCity, setSelectedCity } = useLocation();
   const routerLocation = useRouterLocation();
 
@@ -217,13 +218,13 @@ const Header = () => {
               
               {/* User Authentication */}
               <div className="hidden sm:block">
-                {(isAuthenticated || isFirebaseAuthenticated) ? (
+                {isAuthenticated ? (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                         <Avatar className="h-8 w-8">
                           <AvatarFallback className="bg-primary text-primary-foreground">
-                            {(user?.email || firebaseUser?.email || firebaseUser?.displayName)?.charAt(0).toUpperCase() || 'U'}
+                            {user?.primaryEmailAddress?.emailAddress?.charAt(0).toUpperCase() || 'U'}
                           </AvatarFallback>
                         </Avatar>
                       </Button>
@@ -247,13 +248,12 @@ const Header = () => {
                           Settings
                         </Link>
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={async () => {
-                        if (firebaseUser) await firebaseSignOut();
-                        if (user) await logout();
-                      }} className="flex items-center gap-2">
-                        <LogOut className="w-4 h-4" />
-                        Logout
-                      </DropdownMenuItem>
+                      <SignOutButton>
+                        <DropdownMenuItem className="flex items-center gap-2">
+                          <LogOut className="w-4 h-4" />
+                          Logout
+                        </DropdownMenuItem>
+                      </SignOutButton>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 ) : (
@@ -320,15 +320,14 @@ const Header = () => {
                   </div>
                   
                   {/* Authentication */}
-                  {(isAuthenticated || isFirebaseAuthenticated) ? (
+                  {isAuthenticated ? (
                     <div className="flex flex-col space-y-2">
                       <Button variant="outline" asChild>
                         <Link to={getDashboardLink()}>Dashboard</Link>
                       </Button>
-                      <Button variant="ghost" onClick={async () => {
-                        if (firebaseUser) await firebaseSignOut();
-                        if (user) await logout();
-                      }}>Logout</Button>
+                      <SignOutButton>
+                        <Button variant="ghost">Logout</Button>
+                      </SignOutButton>
                     </div>
                   ) : (
                     <Button asChild>
